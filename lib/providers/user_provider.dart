@@ -1,35 +1,44 @@
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 
-class UserProvider with ChangeNotifier {
-  UserModel? _user;
-  bool _isLoading = false;
+class User {
+  final String id;
+  final String name;
+  final String email;
 
-  UserModel? get user => _user;
-  bool get isLoading => _isLoading;
+  User({required this.id, required this.name, required this.email});
+}
 
-  void setUser(UserModel user) {
-    _user = user;
+class UserProvider extends ChangeNotifier {
+  UserModel? _currentUser;
+  bool _isEmployer = false;
+  User? _user;
+
+  UserModel? get currentUser => _currentUser;
+  bool get isEmployer => _isEmployer;
+  bool get isLoggedIn => _currentUser != null;
+  User? get user => _user;
+
+  void setUser(UserModel? user) {
+    _currentUser = user;
     notifyListeners();
   }
 
-  void setLoading(bool loading) {
-    _isLoading = loading;
+  void toggleUserMode() {
+    _isEmployer = !_isEmployer;
     notifyListeners();
   }
 
-  Future<void> fetchUserData(String userId) async {
-    setLoading(true);
-    // Simulate a network call
-    await Future.delayed(Duration(seconds: 2));
-    // Set a dummy user with all required fields
-    _user = UserModel(
-      id: userId,
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      profilePicture: 'https://example.com/profile.jpg',
-      role: 'candidate',
-    );
-    setLoading(false);
+  void logout() {
+    _currentUser = null;
+    _user = null;
+    notifyListeners();
+  }
+
+  Future<void> login(String email, String password) async {
+    // Simulate API call
+    await Future.delayed(const Duration(seconds: 2));
+    _user = User(id: '1', name: 'John Doe', email: email);
+    notifyListeners();
   }
 }

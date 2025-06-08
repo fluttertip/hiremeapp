@@ -1,47 +1,71 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// class AppTheme {
-//   static ThemeData lightTheme = ThemeData(
-//     primaryColor: Colors.blue,
-//     accentColor: Colors.blueAccent,
-//     backgroundColor: Colors.white,
-//     textTheme: TextTheme(
-//       bodyText1: TextStyle(color: Colors.black),
-//       bodyText2: TextStyle(color: Colors.black54),
-//       headline1: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
-//     ),
-//     appBarTheme: AppBarTheme(
-//       color: Colors.blue,
-//       iconTheme: IconThemeData(color: Colors.white),
-//       textTheme: TextTheme(
-//         headline6: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-//       ),
-//     ),
-//     buttonTheme: ButtonThemeData(
-//       buttonColor: Colors.blue,
-//       textTheme: ButtonTextTheme.primary,
-//     ),
-//   );
+class AppTheme {
+  static const Color primaryColor = Color(0xFF2196F3);
+  static const Color secondaryColor = Color(0xFF03A9F4);
+  static const Color accentColor = Color(0xFF00BCD4);
 
-//   static ThemeData darkTheme = ThemeData(
-//     primaryColor: Colors.black,
-//     accentColor: Colors.grey,
-//     backgroundColor: Colors.black87,
-//     textTheme: TextTheme(
-//       bodyText1: TextStyle(color: Colors.white),
-//       bodyText2: TextStyle(color: Colors.white70),
-//       headline1: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-//     ),
-//     appBarTheme: AppBarTheme(
-//       color: Colors.black,
-//       iconTheme: IconThemeData(color: Colors.white),
-//       textTheme: TextTheme(
-//         headline6: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-//       ),
-//     ),
-//     buttonTheme: ButtonThemeData(
-//       buttonColor: Colors.grey,
-//       textTheme: ButtonTextTheme.primary,
-//     ),
-//   );
-// }
+  static ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    primaryColor: primaryColor,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.light,
+    ),
+    textTheme: GoogleFonts.interTextTheme(),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      centerTitle: true,
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+    ),
+    cardTheme: CardThemeData(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    ),
+  );
+
+  static ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    primaryColor: primaryColor,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.dark,
+    ),
+    textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      centerTitle: true,
+      backgroundColor: Color(0xFF1F1F1F),
+    ),
+    cardTheme: CardThemeData(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    ),
+  );
+}

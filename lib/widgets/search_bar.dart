@@ -1,28 +1,48 @@
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatelessWidget {
-  final String hintText;
-  final Function(String) onChanged;
+class CustomSearchBar extends StatelessWidget {
+  final ValueChanged<String> onChanged;
+  final VoidCallback onFilterPressed;
 
-  const SearchBar({
-    Key? key,
-    required this.hintText,
+  const CustomSearchBar({
+    super.key,
     required this.onChanged,
-  }) : super(key: key);
+    required this.onFilterPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: TextField(
         onChanged: onChanged,
         decoration: InputDecoration(
-          hintText: hintText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.grey),
+          hintText: 'Search jobs...',
+          prefixIcon: const Icon(Icons.search),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.tune),
+            onPressed: onFilterPressed,
           ),
-          suffixIcon: Icon(Icons.search),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: Theme.of(context).colorScheme.surface,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
         ),
       ),
     );
