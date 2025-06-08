@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hiremeapp/screens/edit_profile_screen.dart';
+import 'package:hiremeapp/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/profile_provider.dart';
 import 'notifications_screen.dart';
@@ -22,7 +24,10 @@ class SettingsScreen extends StatelessWidget {
               title: const Text('Edit Profile'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                // TODO: Navigate to edit profile
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                );
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Edit profile coming soon!')),
                 );
@@ -59,19 +64,19 @@ class SettingsScreen extends StatelessWidget {
             SwitchListTile(
               secondary: const Icon(Icons.dark_mode_outlined),
               title: const Text('Dark Mode'),
-              value: false, // TODO: Implement dark mode
+              value: true, // TODO: Implement dark mode
               onChanged: (value) {
                 // TODO: Implement dark mode toggle
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Dark mode coming soon!')),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text(' coming soon!')));
               },
             ),
             SwitchListTile(
               secondary: const Icon(Icons.language_outlined),
               title: const Text('Language'),
               subtitle: const Text('English'),
-              value: false,
+              value: true,
               onChanged: (value) {
                 // TODO: Implement language selection
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -133,11 +138,15 @@ class SettingsScreen extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           // TODO: Implement logout
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Logout coming soon!'),
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
                             ),
+                            (route) => false,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('User logged out !')),
                           );
                         },
                         child: const Text(

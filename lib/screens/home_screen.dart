@@ -44,11 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Activity',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_applications),
+            icon: Icon(Icons.cases),
             label: 'Applications',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
@@ -67,25 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-
-
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => const PostJobModal(),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
-
-
-
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({super.key});
@@ -95,7 +75,7 @@ class MainHomeScreen extends StatefulWidget {
 }
 
 class _MainHomeScreenState extends State<MainHomeScreen> {
-    String _searchQuery = '';
+  String _searchQuery = '';
   bool _isLoading = false;
 
   @override
@@ -122,116 +102,116 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: _loadJobs,
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomSearchBar(
-                      onChanged: (value) {
-                        setState(() => _searchQuery = value);
-                      },
-                      onFilterPressed: _showFilterModal,
+      onRefresh: _loadJobs,
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomSearchBar(
+                    onChanged: (value) {
+                      setState(() => _searchQuery = value);
+                    },
+                    onFilterPressed: _showFilterModal,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Featured Jobs',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Featured Jobs',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Consumer<JobProvider>(
-                      builder: (context, jobProvider, child) {
-                        final featuredJobs = jobProvider.featuredJobs;
-                        return SizedBox(
-                          height: 220,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: featuredJobs.length,
-                            itemBuilder: (context, index) {
-                              final job = featuredJobs[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 12),
-                                child: SizedBox(
-                                  width: 280,
-                                  child: JobCard(
-                                    job: job,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                              JobDetailsScreen(job: job),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                  ),
+                  const SizedBox(height: 10),
+                  Consumer<JobProvider>(
+                    builder: (context, jobProvider, child) {
+                      final featuredJobs = jobProvider.featuredJobs;
+                      return SizedBox(
+                        height: 220,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: featuredJobs.length,
+                          itemBuilder: (context, index) {
+                            final job = featuredJobs[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: SizedBox(
+                                width: 280,
+                                child: JobCard(
+                                  job: job,
+                                  onTap: () {
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => JobDetailsScreen(job: job),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
-                        );
-                      },
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Recent Jobs',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Recent Jobs',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            if (_isLoading)
-              const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else
-              Consumer<JobProvider>(
-                builder: (context, jobProvider, child) {
-                  final jobs = _searchQuery.isEmpty
-                      ? jobProvider.jobs
-                      : jobProvider.searchJobs(_searchQuery);
-
-                  if (jobs.isEmpty) {
-                    return const SliverFillRemaining(
-                      child: Center(child: Text('No jobs found')),
-                    );
-                  }
-
-                  return SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final job = jobs[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: JobCard(
-                            job: job,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => JobDetailsScreen(job: job),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }, childCount: jobs.length),
-                    ),
+          ),
+          if (_isLoading)
+            const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else
+            Consumer<JobProvider>(
+              builder: (context, jobProvider, child) {
+                final jobs = _searchQuery.isEmpty
+                    ? jobProvider.jobs
+                    : jobProvider.searchJobs(_searchQuery);
+                if (jobs.isEmpty) {
+                  return const SliverFillRemaining(
+                    child: Center(child: Text('No jobs found')),
                   );
-                },
-              ),
-          ],
-        ),
-      );
+                }
+
+                return SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final job = jobs[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: JobCard(
+                          job: job,
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => JobDetailsScreen(job: job),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                        ),
+                      );
+                    }, childCount: jobs.length),
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
+    );
   }
 }

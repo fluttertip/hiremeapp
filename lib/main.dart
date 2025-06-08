@@ -14,32 +14,89 @@ import 'screens/employer_dashboard.dart';
 import 'screens/help_support_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const HireMeApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HireMeApp extends StatelessWidget {
+  const HireMeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => JobProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileProvider()),
-      ],
-      child: MaterialApp(
-        title: 'HireMe',
-        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-        home: const SplashScreen(),
-        routes: {
-          '/onboarding': (context) => const OnboardingScreen(),
-          '/login': (context) => const LoginScreen(),
-          '/home': (context) => const MainScreen(),
-          '/employer': (context) => const EmployerDashboard(),
-          '/settings': (context) => const SettingsScreen(),
-          '/help': (context) => const HelpSupportScreen(),
-        },
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 600;
+
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => JobProvider()),
+            ChangeNotifierProvider(create: (_) => ProfileProvider()),
+          ],
+          child: MaterialApp(
+            title: 'HireMe',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              useMaterial3: true,
+              colorSchemeSeed: Colors.blue,
+              brightness: Brightness.light,
+            ),
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              brightness: Brightness.dark,
+              colorSchemeSeed: Colors.blue,
+            ),
+            themeMode: ThemeMode.system,
+            builder: (context, child) {
+              if (isMobile) return child!;
+
+              // Desktop/Web layout wrapped in mobile-like container
+              return Scaffold(
+                backgroundColor: Colors.black,
+                body: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 40),
+                      const Text(
+                        "This app is best viewed in mobile size.\nPlease zoom out or resize your browser.",
+                        style: TextStyle(color: Colors.white70),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: 430,
+                        height: 880,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.4),
+                              blurRadius: 12,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: child!,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            home: const SplashScreen(),
+            routes: {
+              '/onboarding': (context) => const OnboardingScreen(),
+              '/login': (context) => const LoginScreen(),
+              '/home': (context) => const MainScreen(),
+              '/employer': (context) => const EmployerDashboard(),
+              '/settings': (context) => const SettingsScreen(),
+              '/help': (context) => const HelpSupportScreen(),
+            },
+          ),
+        );
+      },
     );
   }
 }

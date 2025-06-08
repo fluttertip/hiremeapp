@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hiremeapp/screens/post_job_modal.dart';
 
 class EmployerDashboard extends StatelessWidget {
   const EmployerDashboard({super.key});
@@ -33,15 +34,26 @@ class EmployerDashboard extends StatelessWidget {
           ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Implement new job posting
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Job posting coming soon!')),
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => const PostJobModal(),
           );
         },
         child: const Icon(Icons.add),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // TODO: Implement new job posting
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       const SnackBar(content: Text('Job posting coming soon!')),
+      //     );
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 
